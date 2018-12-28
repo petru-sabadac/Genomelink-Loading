@@ -3,4 +3,10 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="middleCircle">#213952</color>
+    <color name="topSimpleRounderRect">#ffa91b</color>
+    <color name="topComplexRounderRect">#5dc3cd</color>
+    <color name="bottomSimpleRounderRect">#8553a3</color>
+    <color name="bottomComplexRounderRect">#ff5696</color>
 </resources>
