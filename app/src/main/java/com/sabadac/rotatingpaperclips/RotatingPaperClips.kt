@@ -102,7 +102,7 @@ class RotatingPaperClips @JvmOverloads constructor(
         paint.strokeWidth = dpToPx(widthOfShapes, context)
         buttonRectF.left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
         buttonRectF.top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
-        buttonRectF.right = (bitmap.width + dpToPx(maxHeight, context)) / 2f
+        buttonRectF.right = (bitmap.width + dpToPx(middleCircleRadius, context)) / 2f
         buttonRectF.bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
         bitmapCanvas.rotate(angle, bitmap.width / 2f, bitmap.height / 2f)
         bitmapCanvas.drawRoundRect(
@@ -136,7 +136,7 @@ class RotatingPaperClips @JvmOverloads constructor(
         paint.strokeWidth = dpToPx(widthOfShapes, context)
         buttonRectF.left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
         buttonRectF.top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
-        buttonRectF.right = (bitmap.width + dpToPx(maxHeight, context)) / 2f
+        buttonRectF.right = (bitmap.width + dpToPx(middleCircleRadius, context)) / 2f
         buttonRectF.bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
         bitmapCanvas.rotate(-1 * angle, bitmap.width / 2f, bitmap.height / 2f)
         bitmapCanvas.drawRoundRect(
