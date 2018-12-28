@@ -17,12 +17,12 @@ class RotatingPaperClips @JvmOverloads constructor(
 
     private val angleProperty = "angle"
     private val animationDuration = 2000L
-    private val canvasSide = dpToPx(400, context)
-    private val middleCircleRadius = 40
-    private val widthOfShapes = 14
-    private val cornerRadius = 80
-    private val maxWidth = 360
-    private val maxHeight = 68
+    private val canvasSide = dpToPx(400 / 2, context)
+    private val middleCircleRadius = 40 / 2
+    private val widthOfShapes = 14 / 2
+    private val cornerRadius = 80 / 2
+    private val maxWidth = 360 / 2
+    private val maxHeight = 68 / 2
     private var angle = 60f
     private val buttonRectF = RectF()
     private val bitmap = Bitmap.createBitmap(canvasSide.toInt(), canvasSide.toInt(), Bitmap.Config.ARGB_8888)
