@@ -24,13 +24,21 @@ class GenomelinkLoading @JvmOverloads constructor(
     private val maxWidth = 360
     private val maxHeight = 68
     private var angle = 60f
-    private val buttonRectF = RectF()
     private val bitmap = Bitmap.createBitmap(canvasSide.toInt(), canvasSide.toInt(), Bitmap.Config.ARGB_8888)
     private val bitmapCanvas = Canvas(bitmap)
+    private val shapes = Array(7) { RectF() }
+    private val colors = IntArray(7)
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     init {
+        paint.strokeWidth = dpToPx(widthOfShapes, context)
+        initShapesAndColors()
+        loadAnimations()
+    }
+
+    private fun loadAnimations() {
         val first = firstAnimation()
         val second = secondAnimation()
 
@@ -44,6 +52,50 @@ class GenomelinkLoading @JvmOverloads constructor(
         })
 
         animatorSet.start()
+    }
+
+    private fun initShapesAndColors() {
+        colors[0] = ContextCompat.getColor(context, R.color.topSimpleRounderRect)
+        shapes[0].left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
+        shapes[0].top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
+        shapes[0].right = (bitmap.width + dpToPx(maxWidth, context)) / 2f
+        shapes[0].bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
+
+        colors[1] = ContextCompat.getColor(context, R.color.bottomSimpleRounderRect)
+        shapes[1].left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
+        shapes[1].top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
+        shapes[1].right = (bitmap.width + dpToPx(middleCircleRadius, context)) / 2f
+        shapes[1].bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
+
+        colors[2] = ContextCompat.getColor(context, R.color.topComplexRounderRect)
+        shapes[2].left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
+        shapes[2].top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
+        shapes[2].right = (bitmap.width + dpToPx(maxWidth, context)) / 2f
+        shapes[2].bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
+
+        colors[3] = ContextCompat.getColor(context, R.color.bottomComplexRounderRect)
+        shapes[3].left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
+        shapes[3].top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
+        shapes[3].right = (bitmap.width + dpToPx(middleCircleRadius, context)) / 2f
+        shapes[3].bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
+
+        colors[4] = ContextCompat.getColor(context, R.color.bottomComplexRounderRect)
+        shapes[4].left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
+        shapes[4].top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
+        shapes[4].right = (bitmap.width - dpToPx(maxWidth, context)) / 2f + dpToPx(maxHeight, context)
+        shapes[4].bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
+
+        colors[5] = ContextCompat.getColor(context, R.color.topComplexRounderRect)
+        shapes[5].left = (bitmap.width + dpToPx(maxWidth, context)) / 2f - dpToPx(maxHeight, context)
+        shapes[5].top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
+        shapes[5].right = (bitmap.width + dpToPx(maxWidth, context)) / 2f
+        shapes[5].bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
+
+        colors[6] = ContextCompat.getColor(context, R.color.middleCircle)
+        shapes[6].left = (bitmap.width - dpToPx(cornerRadius, context)) / 2f
+        shapes[6].top = (bitmap.height - dpToPx(cornerRadius, context)) / 2f
+        shapes[6].right = (bitmap.width + dpToPx(cornerRadius, context)) / 2f
+        shapes[6].bottom = (bitmap.height + dpToPx(cornerRadius, context)) / 2f
     }
 
     private fun firstAnimation(): ValueAnimator {
@@ -80,92 +132,26 @@ class GenomelinkLoading @JvmOverloads constructor(
         bitmapCanvas.save()
         bitmapCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
 
-        paint.color = ContextCompat.getColor(context, R.color.topSimpleRounderRect)
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = dpToPx(widthOfShapes, context)
-        buttonRectF.left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
-        buttonRectF.top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
-        buttonRectF.right = (bitmap.width + dpToPx(maxWidth, context)) / 2f
-        buttonRectF.bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
-        bitmapCanvas.rotate(angle, bitmap.width / 2f, bitmap.height / 2f)
-        bitmapCanvas.drawRoundRect(
-            buttonRectF,
-            dpToPx(cornerRadius / 2, context),
-            dpToPx(cornerRadius / 2, context),
-            paint
-        )
-        bitmapCanvas.restore()
+        shapes.forEachIndexed { index, shape ->
+            bitmapCanvas.save()
+            val finalAngle = if (index > 1) -1 * angle else angle
+            if (index != 6) {
+                paint.style = Paint.Style.STROKE
+            } else {
+                paint.style = Paint.Style.FILL
+            }
+            bitmapCanvas.rotate(finalAngle, bitmap.width / 2f, bitmap.height / 2f)
+            paint.color = colors[index]
+            bitmapCanvas.drawRoundRect(
+                shape,
+                dpToPx(cornerRadius / 2, context),
+                dpToPx(cornerRadius / 2, context),
+                paint
+            )
+            bitmapCanvas.restore()
+        }
 
-        bitmapCanvas.save()
-        paint.color = ContextCompat.getColor(context, R.color.bottomSimpleRounderRect)
-        buttonRectF.left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
-        buttonRectF.top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
-        buttonRectF.right = (bitmap.width + dpToPx(middleCircleRadius, context)) / 2f
-        buttonRectF.bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
-        bitmapCanvas.rotate(angle, bitmap.width / 2f, bitmap.height / 2f)
-        bitmapCanvas.drawRoundRect(
-            buttonRectF,
-            dpToPx(cornerRadius / 2, context),
-            dpToPx(cornerRadius / 2, context),
-            paint
-        )
-
-        bitmapCanvas.restore()
-
-        bitmapCanvas.save()
-        paint.color = ContextCompat.getColor(context, R.color.topComplexRounderRect)
-        buttonRectF.left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
-        buttonRectF.top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
-        buttonRectF.right = (bitmap.width + dpToPx(maxWidth, context)) / 2f
-        buttonRectF.bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
-
-        bitmapCanvas.rotate(-1 * angle, bitmap.width / 2f, bitmap.height / 2f)
-        bitmapCanvas.drawRoundRect(
-            buttonRectF,
-            dpToPx(cornerRadius / 2, context),
-            dpToPx(cornerRadius / 2, context),
-            paint
-        )
-        bitmapCanvas.restore()
-
-        bitmapCanvas.save()
-        paint.color = ContextCompat.getColor(context, R.color.bottomComplexRounderRect)
-        buttonRectF.left = (bitmap.width - dpToPx(maxWidth, context)) / 2f
-        buttonRectF.top = (bitmap.height - dpToPx(maxHeight, context)) / 2f
-        buttonRectF.right = (bitmap.width + dpToPx(middleCircleRadius, context)) / 2f
-        buttonRectF.bottom = (bitmap.height + dpToPx(maxHeight, context)) / 2f
-        bitmapCanvas.rotate(-1 * angle, bitmap.width / 2f, bitmap.height / 2f)
-        bitmapCanvas.drawRoundRect(
-            buttonRectF,
-            dpToPx(cornerRadius / 2, context),
-            dpToPx(cornerRadius / 2, context),
-            paint
-        )
-        bitmapCanvas.drawCircle(
-            bitmap.width / 2f - dpToPx(maxWidth / 2 - maxHeight / 2, context),
-            bitmap.height / 2f,
-            dpToPx(maxHeight / 2, context),
-            paint
-        )
-
-        paint.color = ContextCompat.getColor(context, R.color.topComplexRounderRect)
-        bitmapCanvas.drawCircle(
-            bitmap.width / 2f + dpToPx(maxWidth / 2 - maxHeight / 2, context),
-            bitmap.height / 2f,
-            dpToPx(maxHeight / 2, context),
-            paint
-        )
-        bitmapCanvas.restore()
-
-        bitmapCanvas.save()
-        paint.color = ContextCompat.getColor(context, R.color.middleCircle)
-        paint.style = Paint.Style.FILL
-        bitmapCanvas.drawCircle(bitmap.width / 2f, bitmap.height / 2f, dpToPx(middleCircleRadius, context), paint)
-        bitmapCanvas.restore()
-
-        paint.color = Color.TRANSPARENT
-        paint.alpha = 255
-        canvas?.drawBitmap(bitmap, (width - bitmap.width) / 2f, (height - bitmap.height) / 2f, paint)
+        canvas?.drawBitmap(bitmap, (width - bitmap.width) / 2f, (height - bitmap.height) / 2f, bitmapPaint)
     }
 
     private fun dpToPx(dp: Int, context: Context): Float =
