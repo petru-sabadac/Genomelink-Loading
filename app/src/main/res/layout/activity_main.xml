@@ -9,8 +9,9 @@
         tools:context=".MainActivity">
 
     <com.sabadac.rotatingpaperclips.GenomelinkLoading
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/genomelinkLoading"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
